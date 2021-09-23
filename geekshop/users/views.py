@@ -31,37 +31,38 @@ def register(request):
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Вы успешно зарегистрировались')
+            messages.success(request, 'Вы успешно зарегистрировались!')
             return HttpResponseRedirect(reverse('users:login'))
+        else:
+            print(form.errors)
     else:
         form = UserRegisterForm()
-    context = {
-        'title': 'GeekShop - Регистрация',
-        'form': form
-    }
-
+    context = {'title': 'Registration', 'form': form}
     return render(request, 'users/register.html', context)
-
-
-@login_required
-def profile(request):
-    if request.method == 'POST':
-        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Профайл успешно сохранен')
-            return HttpResponseRedirect(reverse('users:profile'))
-
-    else:
-        form = UserProfileForm(instance=request.user)
-    context = {
-        'title': 'GeekShop - Профиль',
-        'form': form,
-        'baskets': Basket.objects.filter(user=request.user)
-    }
-    return render(request, 'users/profile.html', context)
 
 
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
+
+
+@login_required
+@login_required
+def profile(request):
+    global total_quantity, total_sum, baskets
+    user = request.user
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+        else:
+            print(form.errors)
+    else:
+        form = UserProfileForm(instance=user)
+
+    context = {'title': 'Profile Users',
+               'form': form,
+               'baskets': Basket.objects.filter(user=user),
+               }
+    return render(request, 'users/profile.html', context)
