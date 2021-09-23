@@ -9,6 +9,7 @@
 
 
 {% block content %}
+<!-- Page Content -->
 <div class="container">
 
     <div class="row">
@@ -23,6 +24,7 @@
             </div>
 
         </div>
+        <!-- /.col-lg-3 -->
 
         <div class="col-lg-9">
 
@@ -73,7 +75,8 @@
                             <p class="card-text">{{ product.descriptions }}.</p>
                         </div>
                         <div class="card-footer text-center">
-                            <button type="button" class="btn btn-outline-success">Отправить в корзину</button>
+                            <a href="{% url 'baskets:baskets_add' product.id %}" class="btn btn-outline-success">Отправить
+                                в корзину</a>
                         </div>
                     </div>
                 </div>
@@ -101,16 +104,16 @@
     </div>
 
 </div>
-
+<!-- /.container -->
 {% endblock %}
 
 
 {% block footer %}
-
+<!-- Footer -->
 <footer class="py-5 bg-dark">
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
     </div>
-
+    <!-- /.container -->
 </footer>
 {% endblock %}

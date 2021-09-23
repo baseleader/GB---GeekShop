@@ -4,6 +4,7 @@ import os
 import json
 
 from products.models import Product, ProductsCategory
+from django.contrib.auth.decorators import login_required
 
 MODULE_DIR = os.path.dirname(__file__)
 
