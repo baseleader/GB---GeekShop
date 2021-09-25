@@ -1,10 +1,9 @@
 from django.shortcuts import render
-
+from django.contrib.auth.decorators import login_required
 import os
 import json
 
 from products.models import Product, ProductsCategory
-from django.contrib.auth.decorators import login_required
 
 MODULE_DIR = os.path.dirname(__file__)
 
@@ -14,9 +13,9 @@ def index(request):
     return render(request, 'products/index.html', context)
 
 
-def products(request):
+def products(request, id=None):
     context = {'title': 'Каталог',
-               'products': Product.objects.all(),
                'category': ProductsCategory.objects.all(),
                }
+    context.update({'products': Product.objects.filter(category_id=id) if id != None else Product.objects.all()})
     return render(request, 'products/products.html', context)
