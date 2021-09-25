@@ -3,7 +3,7 @@ from django.urls import path
 
 app_name = 'admins'
 
-from .views import index, admin_users_delete, UserUpdateView, UserCreateView, UserListView
+from .views import index, UserDeleteView, UserUpdateView, UserCreateView, UserListView
 #admin_users
 
 urlpatterns = [
@@ -11,5 +11,5 @@ urlpatterns = [
     path('users/', UserListView.as_view(), name='admin_users'),
     path('user-create/', UserCreateView.as_view(), name='admin_users_create'),
     path('user-update/<int:pk>', UserUpdateView.as_view(), name='admin_users_update'),
-    path('user-delete/<int:id>', admin_users_delete, name='admin_users_delete'),
+    path('user-delete/<int:pk>', UserDeleteView.as_view(), name='admin_users_delete'),
 ]
