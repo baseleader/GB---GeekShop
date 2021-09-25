@@ -1,6 +1,14 @@
 [
   {
     "model": "products.productscategory",
+    "pk": 7,
+    "fields": {
+      "name": "Все товары",
+      "description": ""
+    }
+  },
+  {
+    "model": "products.productscategory",
     "pk": 8,
     "fields": {
       "name": "Одежда",

@@ -31,38 +31,45 @@ def register(request):
         form = UserRegisterForm(data=request.POST)
         if form.is_valid():
             form.save()
-            messages.success(request, 'Вы успешно зарегистрировались!')
+            messages.success(request, 'Вы успешно зарегистрировались')
             return HttpResponseRedirect(reverse('users:login'))
-        else:
-            print(form.errors)
     else:
         form = UserRegisterForm()
-    context = {'title': 'Registration', 'form': form}
+    context = {
+        'title': 'GeekShop - Регистрация',
+        'form': form
+    }
+
     return render(request, 'users/register.html', context)
+
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect(reverse('users:profile'))
+
+    else:
+        # total_quantity = 0
+        # total_sum = 0
+        baskets = Basket.objects.filter(user=request.user)
+        # if baskets:
+        #     for basket in baskets:
+        #         total_quantity += basket.quantity
+        #         total_sum += basket.sum()
+        form = UserProfileForm(instance=request.user)
+    context = {
+        'title': 'GeekShop - Профиле',
+        'form': form,
+        'baskets': Basket.objects.filter(user=request.user),
+        # 'total_quantity': sum(basket.quantity for basket in baskets),
+        # 'total_sum': sum(basket.sum() for basket in baskets),
+    }
+    return render(request, 'users/profile.html', context)
 
 
 def logout(request):
     auth.logout(request)
     return HttpResponseRedirect(reverse('index'))
-
-
-@login_required
-@login_required
-def profile(request):
-    global total_quantity, total_sum, baskets
-    user = request.user
-    if request.method == 'POST':
-        form = UserProfileForm(data=request.POST, files=request.FILES, instance=user)
-        if form.is_valid():
-            form.save()
-            return HttpResponseRedirect(reverse('users:profile'))
-        else:
-            print(form.errors)
-    else:
-        form = UserProfileForm(instance=user)
-
-    context = {'title': 'Profile Users',
-               'form': form,
-               'baskets': Basket.objects.filter(user=user),
-               }
-    return render(request, 'users/profile.html', context)
