@@ -23,12 +23,11 @@ wheels/
 pip-wheel-metadata/
 share/python-wheels/
 *.egg-info/
-media/
+geekshop/media/
 .installed.cfg
 *.egg
 MANIFEST
 manage.py
-.env
 
 # PyInstaller
 #  Usually these files are written by a python script from a template
