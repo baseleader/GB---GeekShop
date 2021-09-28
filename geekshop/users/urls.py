@@ -5,8 +5,6 @@ app_name = 'users'
 
 from users.views import login, register, logout, profile, verify
 
-
-
 urlpatterns = [
     path('login/', login, name='login'),
     path('register/', register, name='register'),

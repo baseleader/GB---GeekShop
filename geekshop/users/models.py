@@ -2,12 +2,16 @@ from datetime import timedelta
 
 from django.db import models
 from django.contrib.auth.models import AbstractUser
+
+NOT_NULL = {'blank': True, 'null': True}
+
 from django.utils.timezone import now
 
 
 class User(AbstractUser):
     image = models.ImageField(upload_to='users_image', blank=True)
     age = models.PositiveIntegerField(verbose_name='возраст', default=18)
+
     activation_key = models.CharField(max_length=128, blank=True)
     activation_key_expires = models.DateTimeField(auto_now_add=True, blank=True, null=True)
 

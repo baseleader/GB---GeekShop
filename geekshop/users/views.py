@@ -6,8 +6,6 @@ from django.urls import reverse, reverse_lazy
 from .forms import UserLoginForm, UserRegisterForm, UserProfileForm
 from baskets.models import Basket
 from django.contrib.auth.decorators import login_required
-
-# Create your views here.
 from .models import User
 
 
@@ -56,22 +54,12 @@ def profile(request):
         if form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('users:profile'))
-
     else:
-        # total_quantity = 0
-        # total_sum = 0
         baskets = Basket.objects.filter(user=request.user)
-        # if baskets:
-        #     for basket in baskets:
-        #         total_quantity += basket.quantity
-        #         total_sum += basket.sum()
         form = UserProfileForm(instance=request.user)
     context = {
         'title': 'GeekShop - Профиле',
         'form': form,
-        # 'baskets': Basket.objects.filter(user=request.user),
-        # 'total_quantity': sum(basket.quantity for basket in baskets),
-        # 'total_sum': sum(basket.sum() for basket in baskets),
     }
     return render(request, 'users/profile.html', context)
 

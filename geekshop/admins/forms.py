@@ -5,7 +5,6 @@ from users.models import User
 
 
 class UserAdminRegisterForm(UserRegisterForm):
-
     image = forms.ImageField(widget=forms.FileInput(), required=False)
 
     class Meta:
