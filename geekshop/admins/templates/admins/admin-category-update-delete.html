@@ -3,15 +3,14 @@
 
 {% block content %}
 
-<div id="layoutSidenav_content">
-    <main>
-        <div class="container-fluid">
-            <h1 class="mt-4">Редактирование пользователя | {{ user.username }} </h1>
-            <div class="card-body">
-                <form action="{% url 'admins:admin_users_update' user.id %}" method="post"
-                      enctype="multipart/form-data">
+    <div id="layoutSidenav_content">
+        <main>
+            <div class="container-fluid">
+                <h1 class="mt-4">Редактирование пользователя | {{ user.username  }}  </h1>
+                <div class="card-body">
+                    <form action="{% url 'admins:admin_users_update' user.id %}" method="post" enctype="multipart/form-data">
 
-                    {% csrf_token %}
+                 {% csrf_token %}
                     <div class="form-row">
                         <div class="col-lg-6">
                             <div class="form-group">
@@ -52,26 +51,26 @@
                         </div>
                     </div>
 
-                </form>
-                <form action="{% url 'admins:admin_users_delete' user.id %}" method="post">
-                    {% csrf_token %}
+                    </form>
+                    <form action="{% url 'admins:admin_users_delete' user.id %}" method="post">
+                        {% csrf_token %}
                     <div class="row">
                         <div class="col-lg-12" style="margin-top: 33px;">
-                            <input class="btn btn-danger btn-block" value="Удалить" type="submit">
+                            <input class="btn btn-danger btn-block"  value="Удалить" type="submit">
 
                         </div>
                     </div>
-                </form>
+                    </form>
+                </div>
             </div>
-        </div>
-    </main>
-    <footer class="py-4 bg-light mt-auto">
-        <div class="container-fluid">
-            <div class="d-flex align-items-center justify-content-between small">
-                <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+        </main>
+        <footer class="py-4 bg-light mt-auto">
+            <div class="container-fluid">
+                <div class="d-flex align-items-center justify-content-between small">
+                    <div class="text-muted">Copyright &copy; GeekShop 2021</div>
+                </div>
             </div>
-        </div>
-    </footer>
-</div>
+        </footer>
+    </div>
 
 {% endblock %}

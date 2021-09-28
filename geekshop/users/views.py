@@ -3,9 +3,11 @@ from django.core.mail import send_mail
 from django.shortcuts import render, HttpResponseRedirect
 from django.contrib import auth, messages
 from django.urls import reverse, reverse_lazy
-from .forms import UserLoginForm, UserRegisterForm, UserProfileForm
+from .forms import UserLoginForm, UserRegisterForm, UserProfileForm, UserProfileEditForm
 from baskets.models import Basket
 from django.contrib.auth.decorators import login_required
+
+# Create your views here.
 from .models import User
 
 
@@ -51,15 +53,17 @@ def register(request):
 def profile(request):
     if request.method == 'POST':
         form = UserProfileForm(data=request.POST, instance=request.user, files=request.FILES)
-        if form.is_valid():
+        profile_form = UserProfileEditForm(data=request.POST, instance=request.user.userprofile)
+        if form.is_valid() and profile_form.is_valid():
             form.save()
             return HttpResponseRedirect(reverse('users:profile'))
     else:
-        baskets = Basket.objects.filter(user=request.user)
+        profile_form = UserProfileEditForm(instance=request.user.userprofile)
         form = UserProfileForm(instance=request.user)
     context = {
         'title': 'GeekShop - Профиле',
         'form': form,
+        'profile_form': profile_form
     }
     return render(request, 'users/profile.html', context)
 

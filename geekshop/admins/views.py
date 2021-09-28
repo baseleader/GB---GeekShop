@@ -11,6 +11,9 @@ from products.models import ProductsCategory, Product
 from users.models import User
 
 
+# Create your views here.
+
+
 def index(request):
     return render(request, 'admins/admin.html')
 
@@ -76,6 +79,9 @@ class UserDeleteView(DeleteView):
         self.object.is_active = False
         self.object.save()
         return HttpResponseRedirect(self.get_success_url())
+
+
+# category
 
 
 class CategoryListView(ListView):

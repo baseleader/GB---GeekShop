@@ -69,10 +69,10 @@
                         </a>
                         <div class="card-body">
                             <h4 class="card-title">
-                                <a href="#">{{ product.name }}</a>
+                                <a href="{% url 'products:detail' product.id %}">{{ product.name }}</a>
                             </h4>
                             <h5>{{ product.price }} руб.</h5>
-                            <p class="card-text">{{ product.descriptions }}.</p>
+                            <p class="card-text">{{ product.description }}.</p>
                         </div>
                         <div class="card-footer text-center">
                             <a href="{% url 'baskets:baskets_add' product.id %}" class="btn btn-outline-success">Отправить
@@ -88,17 +88,18 @@
             <nav aria-label="Page navigation example">
                 <ul class="pagination justify-content-center">
                     <li class="page-item {% if not products.has_previous %} disabled {% endif %}">
-                        <a class="page-link" href="{% if products.has_previous %}
-                        {% url 'products:page' products.previous_page_number %} {% else %}
-                           # {% endif %}" tabindex="-1" aria-disabled="true">Previous</a>
+                        <a class="page-link" href="{%  if products.has_previous  %}
+                                {% url 'products:page' products.previous_page_number %}  {% else %}
+                                # {% endif %}" tabindex="-1" aria-disabled="true">Previous</a>
                     </li>
                     {% for page in products.paginator.page_range %}
                     <li class="page-item"><a class="page-link" href="{% url 'products:page' page %}">{{ page }}</a></li>
                     {% endfor %}
+
                     <li class="page-item {% if not products.has_next %} disabled {% endif %}">
                         <a class="page-link" href="{% if products.has_next %}
-                            {% url 'products:page' products.next_page_number %}
-                            {% else %} # {% endif %}">Next</a>
+                                {% url 'products:page' products.next_page_number %}
+                                {% else %} # {% endif %}">Next</a>
                     </li>
                 </ul>
             </nav>
@@ -108,7 +109,6 @@
     </div>
 
 </div>
-<!-- /.container -->
 {% endblock %}
 
 
@@ -118,6 +118,5 @@
     <div class="container">
         <p class="m-0 text-center text-white">Copyright &copy; GeekShop 2020</p>
     </div>
-    <!-- /.container -->
 </footer>
 {% endblock %}

@@ -1,8 +1,11 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
 import os
 import json
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
+
+from django.views.generic import DetailView
 
 from products.models import Product, ProductsCategory
 
@@ -24,5 +27,18 @@ def products(request, id=None, page=1):
     except EmptyPage:
         products_paginator = paginator.page(paginator.num_pages)
 
-    context = {'title': 'Каталог', 'category': ProductsCategory.objects.all(), 'products': products_paginator}
+    context = {'title': 'Каталог',
+               'category': ProductsCategory.objects.all()}
+    context['products'] = products_paginator
     return render(request, 'products/products.html', context)
+
+
+class ProductDetail(DetailView):
+    model = Product
+    template_name = 'products/product_detail.html'
+    context_object_name = 'product'
+
+    def get_context_data(self, category_id=None, *args, **kwargs):
+        context = super().get_context_data()
+        context['categories'] = ProductsCategory.objects.all()
+        return context
