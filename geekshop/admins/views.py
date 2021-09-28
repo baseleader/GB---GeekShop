@@ -5,8 +5,13 @@ from django.contrib.auth.decorators import user_passes_test
 from django.utils.decorators import method_decorator
 from django.views.generic.list import ListView
 from django.views.generic.edit import CreateView, UpdateView, DeleteView
+
 from admins.forms import UserAdminRegisterForm, UserAdminProfileForm
+from products.models import ProductsCategory, Product
 from users.models import User
+
+
+# Create your views here.
 
 
 def index(request):
@@ -15,11 +20,12 @@ def index(request):
 
 class UserListView(ListView):
     model = User
+    context_object_name = 'users'
     template_name = 'admins/admin-users-read.html'
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UserListView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка  | Пользователи'
+        context['title'] = 'Админка | Пользователи'
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
@@ -35,7 +41,7 @@ class UserCreateView(CreateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UserCreateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка  | Регистрация'
+        context['title'] = 'Админка | Регистрация'
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
@@ -51,7 +57,7 @@ class UserUpdateView(UpdateView):
 
     def get_context_data(self, *, object_list=None, **kwargs):
         context = super(UserUpdateView, self).get_context_data(**kwargs)
-        context['title'] = 'Админка  | Обновление пользователя'
+        context['title'] = 'Админка | Обновление пользователя'
         return context
 
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
@@ -67,3 +73,26 @@ class UserDeleteView(DeleteView):
     @method_decorator(user_passes_test(lambda u: u.is_superuser))
     def dispatch(self, request, *args, **kwargs):
         return super(UserDeleteView, self).dispatch(request, *args, **kwargs)
+
+    def delete(self, request, *args, **kwargs):
+        self.object = self.get_object()
+        self.object.is_active = False
+        self.object.save()
+        return HttpResponseRedirect(self.get_success_url())
+
+
+# category
+
+
+class CategoryListView(ListView):
+    model = ProductsCategory
+    template_name = 'admins/admin-category-read.html'
+
+    def get_context_data(self, *, object_list=None, **kwargs):
+        context = super(CategoryListView, self).get_context_data(**kwargs)
+        context['title'] = 'Админка | Категории'
+        return context
+
+    @method_decorator(user_passes_test(lambda u: u.is_superuser))
+    def dispatch(self, request, *args, **kwargs):
+        return super(CategoryListView, self).dispatch(request, *args, **kwargs)
