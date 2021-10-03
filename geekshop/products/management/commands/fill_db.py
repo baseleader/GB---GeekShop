@@ -1,10 +1,8 @@
-
 import os
 import json
 from django.contrib.auth.models import AbstractUser
 from django.contrib.auth.models import User
 from django.core.management.base import BaseCommand
-
 
 from products.models import ProductsCategory, Product
 
@@ -13,7 +11,6 @@ JSON_PATH = 'products/fixtures'
 
 def load_from_json(file_name):
     with open(file_name, mode='r', encoding='windows-1251') as infile:
-
         return json.load(infile)
 
 
@@ -35,6 +32,6 @@ class Command(BaseCommand):
             prod = product.get('fields')
             category = prod.get('category')
             _category = ProductsCategory.objects.get(id=category)
-            prod['category'] =_category
+            prod['category'] = _category
             new_category = Product(**prod)
             new_category.save()
