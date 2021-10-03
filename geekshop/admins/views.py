@@ -81,9 +81,6 @@ class UserDeleteView(DeleteView):
         return HttpResponseRedirect(self.get_success_url())
 
 
-# category
-
-
 class CategoryListView(ListView):
     model = ProductsCategory
     template_name = 'admins/admin-category-read.html'

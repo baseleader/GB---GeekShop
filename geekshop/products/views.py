@@ -28,7 +28,8 @@ def products(request, id=None, page=1):
         products_paginator = paginator.page(paginator.num_pages)
 
     context = {'title': 'Каталог',
-               'category': ProductsCategory.objects.all()}
+               'category': ProductsCategory.objects.all(),
+               }
     context['products'] = products_paginator
     return render(request, 'products/products.html', context)
 
