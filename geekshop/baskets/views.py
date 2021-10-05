@@ -18,7 +18,7 @@ def baskets_add(request, id):
     else:
         baskets = baskets.first()
         baskets.quantity += 1
-        baskets.save()
+        baskets.save(update_fields=['quantity'])
         return HttpResponseRedirect(request.META.get('HTTP_REFERER'))
 
 
@@ -40,5 +40,5 @@ def basket_edit(request, id, quantity):
 
         baskets = Basket.objects.filter(user=request.user)
         context = {'baskets': baskets}
-        result = render_to_string('baskets/baskets.html', context, request=request)
+        result = render_to_string('baskets/baskets.html', context)
         return JsonResponse({'result': result})

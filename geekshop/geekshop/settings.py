@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     'baskets',
     'admins',
     'social_django',
+    'ordersapp',
 ]
 
 MIDDLEWARE = [
@@ -45,7 +46,6 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 
     'social_django.middleware.SocialAuthExceptionMiddleware',
-    # 'social_django.middleware.SocialAuthExceptionMiddlewar'
 ]
 
 ROOT_URLCONF = 'geekshop.urls'
