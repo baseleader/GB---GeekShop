@@ -7,6 +7,7 @@ from products.models import Product
 
 
 class Basket(models.Model):
+
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField(default=0)
@@ -29,3 +30,7 @@ class Basket(models.Model):
     def total_sum(user):
         baskets = Basket.objects.filter(user=user)
         return sum(basket.sum() for basket in baskets)
+
+    @staticmethod
+    def get_item(pk):
+        return Basket.objects.get(pk=pk)

@@ -1,5 +1,7 @@
-from django.db import models
 from django.conf import settings
+from django.db import models
+
+# Create your models here.
 from products.models import Product
 
 
@@ -11,21 +13,21 @@ class Order(models.Model):
     READY = 'RDY'
     CANCEL = 'CNC'
 
-    ORDER_CHOICES = (
-        (FORMING, 'Формируется'),
-        (SENT_TO_PROCEED, 'Отправлено в обработку'),
-        (PAID, 'Оплачено'),
-        (PROCEEDED, 'Обробатывается'),
-        (READY, 'Готов к выдаче'),
-        (CANCEL, 'Отмена заказа'),
+    ORDER_STATUS_CHOICES = (
+        (FORMING, 'формируется'),
+        (SENT_TO_PROCEED, 'отправлено в обработку'),
+        (PAID, 'оплачено'),
+        (PROCEEDED, 'обрабатывается'),
+        (READY, 'готов к выдачи'),
+        (CANCEL, 'отмена зазака')
     )
 
     user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
-    created = models.DateTimeField(verbose_name='create', auto_now_add=True)
-    update = models.DateTimeField(verbose_name='update', auto_now=True)
-    status = models.CharField(verbose_name='status', max_length=3, default=FORMING, choices=ORDER_CHOICES)
+    created = models.DateTimeField(verbose_name='создан', auto_now_add=True)
+    updated = models.DateTimeField(verbose_name='обновлен', auto_now=True)
+    status = models.CharField(choices=ORDER_STATUS_CHOICES, verbose_name='статус', max_length=3, default=FORMING)
 
-    is_active = models.BooleanField(verbose_name='active', default=True)
+    is_active = models.BooleanField(verbose_name='активен', default=True)
 
     def __str__(self):
         return f'Текущий заказ {self.pk}'
@@ -36,17 +38,27 @@ class Order(models.Model):
 
     def get_total_cost(self):
         items = self.orderitems.select_related()
-        return sum(list(map(lambda x: x.get_total_cost, items)))
+        return sum(list(map(lambda x: x.get_product_cost(), items)))
+
+    def delete(self, using=None, keep_parents=False):
+        for item in self.orderitems.select_related():
+            item.products.quantity += item.quantity
+            item.products.save()
+        self.is_active = False
+        self.save()
+
+    @staticmethod
+    def get_item(pk):
+        return Order.objects.get(pk=pk)
 
 
 class OrderItem(models.Model):
     order = models.ForeignKey(Order, related_name='orderitems', on_delete=models.CASCADE)
-    products = models.ForeignKey(Product, verbose_name='product', on_delete=models.CASCADE)
-    quantity = models.PositiveIntegerField(verbose_name='quantity', default=0)
+    product = models.ForeignKey(Product, verbose_name='продукты', on_delete=models.CASCADE)
+    quantity = models.PositiveIntegerField(verbose_name='Количество', default=0)
 
     def get_product_cost(self):
-        return self.products.price * self.quantity
+        return self.product.price * self.quantity
 
     def __str__(self):
         return f'Текущий заказ {self.pk}'
-
